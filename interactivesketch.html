@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+    <title>Adding interactivity to touchscreens using sketch.js</title>
+    <style>
+html, body {
+    background-image: url(https://storage.googleapis.com/risemedialibrary-960b72df-9af7-476b-8a47-b67ded4c779d/andthentherewassilence2.bmp);
+    background-repeat: no-repeat;
+}
+
+.container {
+    margin: -10px 0px -10px -10px;
+
+}
+</style>
+</head>
+<body>
+    <div id="container"></div>
+    <script src="http://soulwire.github.io/sketch.js/js/sketch.js"></script>
+    <script>
+
+        var COLOR = [ '#975b02' ]; // add your HEX color code here
+        var radius = 0;
+
+        Sketch.create({
+
+            container: document.getElementById( 'container' ),
+            autoclear: false,
+
+            setup: function() {
+                console.log( 'setup' );
+            },
+
+            update: function() {
+                radius = 1 + abs( sin( this.millis * 0.002 ) * 10 ); // change thickness of the line 
+            },
+
+            // Event handlers
+
+            keydown: function() {
+                if ( this.keys.R ) this.clear();
+            },
+
+            // Mouse & touch events are merged, so handling touch events by default
+            // and powering sketches using the touches array is recommended for easy
+            // scalability. If you only need to handle the mouse / desktop browsers,
+            // use the 0th touch element and you get wider device support for free.
+            touchmove: function() {
+
+                for ( var i = this.touches.length - 1, touch; i >= 0; i-- ) {
+
+                    touch = this.touches[i];
+
+                    this.lineCap = 'round';
+                    this.lineJoin = 'round';
+                    this.fillStyle = this.strokeStyle = COLOR[ i % COLOR.length ];
+                    this.lineWidth = radius;
+
+                    this.beginPath();
+                    this.moveTo( touch.ox, touch.oy );
+                    this.lineTo( touch.x, touch.y );
+                    this.stroke();
+                }
+            }
+        });
+</script>
+
+</body>
+</html>
